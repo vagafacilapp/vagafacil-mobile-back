@@ -1,0 +1,55 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String
+  password  String
+  phone     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Vaga {
+  id            String     @id @default(uuid())
+  name          String
+  descricao     String
+  businessHours String
+  location      String
+  latitude      String
+  longitude     String
+  price         String
+  status        String
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  Category      Category?  @relation(fields: [categoryId], references: [id])
+  categoryId    String?
+  Feedbacks     Feedbacks? @relation(fields: [feedbacksId], references: [id])
+  feedbacksId   String?
+}
+
+model Category {
+  id        String   @id @default(uuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  vagas     Vaga[]
+}
+
+model Feedbacks {
+  id          String   @id @default(uuid())
+  count       String
+  name        String
+  rating      String
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  vagas       Vaga[]
+}
